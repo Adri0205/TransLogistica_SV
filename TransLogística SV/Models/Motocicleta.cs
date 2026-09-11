@@ -16,6 +16,6 @@ namespace TransLogística_SV.Models
             double factorKilometraje = 0.005 * Kilometraje;
 
             return Math.Round(costoBase + recargoCilindraje + factorKilometraje, 2);
-        } l
+        } 
     }
 }

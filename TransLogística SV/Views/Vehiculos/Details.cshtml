@@ -1,0 +1,92 @@
+@model TransLogística_SV.Models.Vehiculo
+
+@{
+    ViewData["Title"] = "Detalles del vehículo";
+}
+
+<div class="container mt-4">
+
+    <h1>Detalles del vehículo</h1>
+
+    <div class="card mt-3">
+        <div class="card-header">
+            <h4>@Model.TipoVehiculo</h4>
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                <strong>Placa:</strong>
+                @Model.Placa
+            </p>
+
+            <p>
+                <strong>Marca:</strong>
+                @Model.Marca
+            </p>
+
+            <p>
+                <strong>Modelo:</strong>
+                @Model.Modelo
+            </p>
+
+            <p>
+                <strong>Año:</strong>
+                @Model.Anio
+            </p>
+
+            <p>
+                <strong>Kilometraje:</strong>
+                @Model.Kilometraje km
+            </p>
+
+            @if (Model is TransLogística_SV.Models.Camion camion)
+            {
+                <p>
+                    <strong>Capacidad de carga:</strong>
+                    @camion.CapacidadCargaToneladas toneladas
+                </p>
+            }
+
+            @if (Model is TransLogística_SV.Models.Automovil automovil)
+            {
+                <p>
+                    <strong>Tipo de combustible:</strong>
+                    @automovil.TipoCombustible
+                </p>
+            }
+
+            @if (Model is TransLogística_SV.Models.Motocicleta motocicleta)
+            {
+                <p>
+                    <strong>Cilindraje:</strong>
+                    @motocicleta.Cilindraje cc
+                </p>
+            }
+
+            <hr />
+
+            <p>
+                <strong>Costo estimado de mantenimiento:</strong>
+                $@Model.CalcularCostoMantenimiento()
+            </p>
+
+        </div>
+
+        <div class="card-footer">
+
+            <a asp-action="Edit"
+               asp-route-placa="@Model.Placa"
+               class="btn btn-warning">
+                Editar
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Volver
+            </a>
+
+        </div>
+    </div>
+
+</div>

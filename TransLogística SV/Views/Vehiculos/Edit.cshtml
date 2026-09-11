@@ -1,0 +1,152 @@
+@model TransLogística_SV.Models.Vehiculo
+
+@{
+    ViewData["Title"] = "Editar vehículo";
+}
+
+<div class="container mt-4">
+
+    <h1>Editar vehículo</h1>
+
+    <form asp-action="Edit" method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               name="placaOriginal"
+               value="@Model.Placa" />
+
+        <div asp-validation-summary="All"
+             class="text-danger"></div>
+
+        <div class="mb-3">
+            <label class="form-label">Tipo de vehículo</label>
+
+            <input class="form-control"
+                   value="@Model.TipoVehiculo"
+                   readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Placa</label>
+
+            <input name="placa"
+                   class="form-control"
+                   value="@Model.Placa"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Marca</label>
+
+            <input name="marca"
+                   class="form-control"
+                   value="@Model.Marca"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Modelo</label>
+
+            <input name="modelo"
+                   class="form-control"
+                   value="@Model.Modelo"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Año</label>
+
+            <input name="anio"
+                   type="number"
+                   class="form-control"
+                   value="@Model.Anio"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Kilometraje</label>
+
+            <input name="kilometraje"
+                   type="number"
+                   step="0.01"
+                   class="form-control"
+                   value="@Model.Kilometraje"
+                   required />
+        </div>
+
+        @if (Model is TransLogística_SV.Models.Camion camion)
+        {
+            <div class="mb-3">
+                <label class="form-label">
+                    Capacidad de carga (toneladas)
+                </label>
+
+                <input name="capacidadCargaToneladas"
+                       type="number"
+                       step="0.01"
+                       class="form-control"
+                       value="@camion.CapacidadCargaToneladas" />
+            </div>
+        }
+
+        @if (Model is TransLogística_SV.Models.Automovil automovil)
+        {
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Tipo de combustible
+                </label>
+
+                <select name="tipoCombustible"
+                        class="form-select">
+
+                    <option value="Gasolina Regular"
+                            selected="@(automovil.TipoCombustible == "Gasolina Regular")">
+                        Gasolina Regular
+                    </option>
+
+                    <option value="Gasolina Premium"
+                            selected="@(automovil.TipoCombustible == "Gasolina Premium")">
+                        Gasolina Premium
+                    </option>
+
+                    <option value="Diesel"
+                            selected="@(automovil.TipoCombustible == "Diesel")">
+                        Diesel
+                    </option>
+
+                </select>
+
+            </div>
+        }
+
+        @if (Model is TransLogística_SV.Models.Motocicleta motocicleta)
+        {
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Cilindraje (cc)
+                </label>
+
+                <input name="cilindraje"
+                       type="number"
+                       class="form-control"
+                       value="@motocicleta.Cilindraje" />
+
+            </div>
+        }
+
+        <button type="submit"
+                class="btn btn-success">
+            Guardar cambios
+        </button>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+
+    </form>
+
+</div>

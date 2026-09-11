@@ -1,0 +1,78 @@
+@model IEnumerable<TransLogística_SV.Models.Vehiculo>
+
+@{
+    ViewData["Title"] = "Vehículos";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Vehículos</h1>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Registrar vehículo
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No hay vehículos registrados.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Placa</th>
+                    <th>Tipo</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Año</th>
+                    <th>Kilometraje</th>
+                    <th>Mantenimiento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var vehiculo in Model)
+                {
+                    <tr>
+                        <td>@vehiculo.Placa</td>
+                        <td>@vehiculo.TipoVehiculo</td>
+                        <td>@vehiculo.Marca</td>
+                        <td>@vehiculo.Modelo</td>
+                        <td>@vehiculo.Anio</td>
+                        <td>@vehiculo.Kilometraje km</td>
+                        <td>$@vehiculo.CalcularCostoMantenimiento()</td>
+
+                        <td>
+                            <a asp-action="Details"
+                               asp-route-placa="@vehiculo.Placa"
+                               class="btn btn-info btn-sm">
+                                Ver
+                            </a>
+
+                            <a asp-action="Edit"
+                               asp-route-placa="@vehiculo.Placa"
+                               class="btn btn-warning btn-sm">
+                                Editar
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-placa="@vehiculo.Placa"
+                               class="btn btn-danger btn-sm">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    }
+
+</div>
