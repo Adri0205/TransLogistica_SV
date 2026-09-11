@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using TransLogística_SV.Models;
@@ -7,13 +6,19 @@ namespace TransLogística_SV.Repositories
 {
     public class VehiculoRepositorio
     {
-        private static ConcurrentDictionary<string, Vehiculo> _vehiculos =
-            new ConcurrentDictionary<string, Vehiculo>();
+        private static Dictionary<string, Vehiculo> _vehiculos =
+            new Dictionary<string, Vehiculo>();
 
         // Agregar un vehículo
         public bool Agregar(Vehiculo vehiculo)
         {
-            return _vehiculos.TryAdd(vehiculo.Placa, vehiculo);
+            if (_vehiculos.ContainsKey(vehiculo.Placa))
+            {
+                return false;
+            }
+
+            _vehiculos.Add(vehiculo.Placa, vehiculo);
+            return true;
         }
 
         // Para obtener todos los vehículos
@@ -25,9 +30,9 @@ namespace TransLogística_SV.Repositories
         // Para obtener un vehículo por placa
         public Vehiculo? ObtenerPorPlaca(string placa)
         {
-            if (_vehiculos.TryGetValue(placa, out var v))
+            if (_vehiculos.ContainsKey(placa))
             {
-                return v;
+                return _vehiculos[placa];
             }
 
             return null;
@@ -41,14 +46,20 @@ namespace TransLogística_SV.Repositories
                 return false;
             }
 
-            _vehiculos[placa] = vehiculo; // indexer es seguro en ConcurrentDictionary
+            _vehiculos[placa] = vehiculo;
             return true;
         }
 
         // Eliminar un vehículo
         public bool Eliminar(string placa)
         {
-            return _vehiculos.TryRemove(placa, out _);
+            if (!_vehiculos.ContainsKey(placa))
+            {
+                return false;
+            }
+
+            _vehiculos.Remove(placa);
+            return true;
         }
     }
 }

@@ -27,7 +27,8 @@ namespace TransLogística_SV.Models
         [Range(0, double.MaxValue, ErrorMessage = "Capacidad inválida.")]
         public double? CapacidadCargaToneladas { get; set; }
 
-        public string TipoCombustible { get; set; } = string.Empty;
+        // Opcional: solo aplicable para Automovil
+        public string? TipoCombustible { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Cilindraje inválido.")]
         public int? Cilindraje { get; set; }
