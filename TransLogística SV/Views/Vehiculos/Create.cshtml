@@ -1,3 +1,5 @@
+@model TransLogística_SV.Models.VehiculoViewModel
+
 @{
     ViewData["Title"] = "Registrar vehículo";
 }
@@ -15,7 +17,7 @@
         <div class="mb-3">
             <label class="form-label">Tipo de vehículo</label>
 
-            <select name="tipo"
+            <select asp-for="Tipo"
                     id="tipo"
                     class="form-select"
                     onchange="mostrarCampos()"
@@ -27,44 +29,37 @@
                 <option value="Motocicleta">Motocicleta</option>
 
             </select>
+            <span asp-validation-for="Tipo" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Placa</label>
-            <input name="placa"
-                   class="form-control"
-                   required />
+            <input asp-for="Placa" class="form-control" />
+            <span asp-validation-for="Placa" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Marca</label>
-            <input name="marca"
-                   class="form-control"
-                   required />
+            <input asp-for="Marca" class="form-control" />
+            <span asp-validation-for="Marca" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Modelo</label>
-            <input name="modelo"
-                   class="form-control"
-                   required />
+            <input asp-for="Modelo" class="form-control" />
+            <span asp-validation-for="Modelo" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Año</label>
-            <input name="anio"
-                   type="number"
-                   class="form-control"
-                   required />
+            <input asp-for="Anio" type="number" class="form-control" />
+            <span asp-validation-for="Anio" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Kilometraje</label>
-            <input name="kilometraje"
-                   type="number"
-                   step="0.01"
-                   class="form-control"
-                   required />
+            <input asp-for="Kilometraje" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="Kilometraje" class="text-danger"></span>
         </div>
 
         <!-- Datos del camión -->
@@ -75,10 +70,8 @@
                     Capacidad de carga en toneladas
                 </label>
 
-                <input name="capacidadCargaToneladas"
-                       type="number"
-                       step="0.01"
-                       class="form-control" />
+                <input asp-for="CapacidadCargaToneladas" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="CapacidadCargaToneladas" class="text-danger"></span>
             </div>
 
         </div>
@@ -91,23 +84,15 @@
                     Tipo de combustible
                 </label>
 
-                <select name="tipoCombustible"
-                        class="form-select">
+                <select asp-for="TipoCombustible" class="form-select">
 
                     <option value="">Seleccione</option>
-                    <option value="Gasolina Regular">
-                        Gasolina Regular
-                    </option>
-
-                    <option value="Gasolina Premium">
-                        Gasolina Premium
-                    </option>
-
-                    <option value="Diesel">
-                        Diesel
-                    </option>
+                    <option value="Gasolina Regular">Gasolina Regular</option>
+                    <option value="Gasolina Premium">Gasolina Premium</option>
+                    <option value="Diesel">Diesel</option>
 
                 </select>
+                <span asp-validation-for="TipoCombustible" class="text-danger"></span>
             </div>
 
         </div>
@@ -120,33 +105,25 @@
                     Cilindraje (cc)
                 </label>
 
-                <input name="cilindraje"
-                       type="number"
-                       class="form-control" />
+                <input asp-for="Cilindraje" type="number" class="form-control" />
+                <span asp-validation-for="Cilindraje" class="text-danger"></span>
             </div>
 
         </div>
 
-        <button type="submit"
-                class="btn btn-success">
-            Guardar
-        </button>
+        <button type="submit" class="btn btn-success">Guardar</button>
 
-        <a asp-action="Index"
-           class="btn btn-secondary">
-            Cancelar
-        </a>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 
     </form>
 
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 
     <script>
-
         function mostrarCampos() {
-
             var tipo = document.getElementById("tipo").value;
 
             document.getElementById("camionCampos").style.display = "none";
@@ -166,6 +143,10 @@
             }
         }
 
+        // Muestra secciones si ya hay un valor seleccionado (cuando vuelve la vista con errores)
+        document.addEventListener('DOMContentLoaded', function () {
+            mostrarCampos();
+        });
     </script>
 
 }

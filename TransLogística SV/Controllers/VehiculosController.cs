@@ -41,65 +41,61 @@ namespace TransLogística_SV.Controllers
         // GET: Vehiculos/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new TransLogística_SV.Models.VehiculoViewModel());
         }
 
         // POST: Vehiculos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(
-            string tipo,
-            string placa,
-            string marca,
-            string modelo,
-            int anio,
-            double kilometraje,
-            double capacidadCargaToneladas,
-            string tipoCombustible,
-            int cilindraje)
+        public IActionResult Create(TransLogística_SV.Models.VehiculoViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             Vehiculo vehiculo;
 
-            if (tipo == "Camion")
+            if (vm.Tipo == "Camion")
             {
                 vehiculo = new Camion
                 {
-                    Placa = placa,
-                    Marca = marca,
-                    Modelo = modelo,
-                    Anio = anio,
-                    Kilometraje = kilometraje,
-                    CapacidadCargaToneladas = capacidadCargaToneladas
+                    Placa = vm.Placa,
+                    Marca = vm.Marca,
+                    Modelo = vm.Modelo,
+                    Anio = vm.Anio,
+                    Kilometraje = vm.Kilometraje,
+                    CapacidadCargaToneladas = vm.CapacidadCargaToneladas ?? 0.0
                 };
             }
-            else if (tipo == "Automovil")
+            else if (vm.Tipo == "Automovil")
             {
                 vehiculo = new Automovil
                 {
-                    Placa = placa,
-                    Marca = marca,
-                    Modelo = modelo,
-                    Anio = anio,
-                    Kilometraje = kilometraje,
-                    TipoCombustible = tipoCombustible
+                    Placa = vm.Placa,
+                    Marca = vm.Marca,
+                    Modelo = vm.Modelo,
+                    Anio = vm.Anio,
+                    Kilometraje = vm.Kilometraje,
+                    TipoCombustible = vm.TipoCombustible
                 };
             }
-            else if (tipo == "Motocicleta")
+            else if (vm.Tipo == "Motocicleta")
             {
                 vehiculo = new Motocicleta
                 {
-                    Placa = placa,
-                    Marca = marca,
-                    Modelo = modelo,
-                    Anio = anio,
-                    Kilometraje = kilometraje,
-                    Cilindraje = cilindraje
+                    Placa = vm.Placa,
+                    Marca = vm.Marca,
+                    Modelo = vm.Modelo,
+                    Anio = vm.Anio,
+                    Kilometraje = vm.Kilometraje,
+                    Cilindraje = vm.Cilindraje ?? 0
                 };
             }
             else
             {
-                ModelState.AddModelError("", "Debe seleccionar un tipo de vehículo.");
-                return View();
+                ModelState.AddModelError("Tipo", "Debe seleccionar un tipo de vehículo.");
+                return View(vm);
             }
 
             if (!_repositorio.Agregar(vehiculo))
@@ -109,7 +105,7 @@ namespace TransLogística_SV.Controllers
                     "Ya existe un vehículo registrado con esa placa."
                 );
 
-                return View();
+                return View(vm);
             }
 
             return RedirectToAction(nameof(Index));
@@ -130,23 +126,44 @@ namespace TransLogística_SV.Controllers
                 return NotFound();
             }
 
-            return View(vehiculo);
+            var vm = new TransLogística_SV.Models.VehiculoViewModel
+            {
+                Placa = vehiculo.Placa,
+                Marca = vehiculo.Marca,
+                Modelo = vehiculo.Modelo,
+                Anio = vehiculo.Anio,
+                Kilometraje = vehiculo.Kilometraje
+            };
+
+            if (vehiculo is Camion c)
+            {
+                vm.Tipo = "Camion";
+                vm.CapacidadCargaToneladas = c.CapacidadCargaToneladas;
+            }
+            else if (vehiculo is Automovil a)
+            {
+                vm.Tipo = "Automovil";
+                vm.TipoCombustible = a.TipoCombustible;
+            }
+            else if (vehiculo is Motocicleta m)
+            {
+                vm.Tipo = "Motocicleta";
+                vm.Cilindraje = m.Cilindraje;
+            }
+
+            return View(vm);
         }
 
         // POST: Vehiculos/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(
-            string placaOriginal,
-            string placa,
-            string marca,
-            string modelo,
-            int anio,
-            double kilometraje,
-            double capacidadCargaToneladas,
-            string tipoCombustible,
-            int cilindraje)
+        public IActionResult Edit(string placaOriginal, TransLogística_SV.Models.VehiculoViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             var vehiculoActual = _repositorio.ObtenerPorPlaca(placaOriginal);
 
             if (vehiculoActual == null)
@@ -156,55 +173,55 @@ namespace TransLogística_SV.Controllers
 
             Vehiculo vehiculo;
 
-            if (vehiculoActual is Camion)
+            if (vm.Tipo == "Camion")
             {
                 vehiculo = new Camion
                 {
-                    Placa = placa,
-                    Marca = marca,
-                    Modelo = modelo,
-                    Anio = anio,
-                    Kilometraje = kilometraje,
-                    CapacidadCargaToneladas = capacidadCargaToneladas
+                    Placa = vm.Placa,
+                    Marca = vm.Marca,
+                    Modelo = vm.Modelo,
+                    Anio = vm.Anio,
+                    Kilometraje = vm.Kilometraje,
+                    CapacidadCargaToneladas = vm.CapacidadCargaToneladas ?? 0.0
                 };
             }
-            else if (vehiculoActual is Automovil)
+            else if (vm.Tipo == "Automovil")
             {
                 vehiculo = new Automovil
                 {
-                    Placa = placa,
-                    Marca = marca,
-                    Modelo = modelo,
-                    Anio = anio,
-                    Kilometraje = kilometraje,
-                    TipoCombustible = tipoCombustible
+                    Placa = vm.Placa,
+                    Marca = vm.Marca,
+                    Modelo = vm.Modelo,
+                    Anio = vm.Anio,
+                    Kilometraje = vm.Kilometraje,
+                    TipoCombustible = vm.TipoCombustible
                 };
             }
             else
             {
                 vehiculo = new Motocicleta
                 {
-                    Placa = placa,
-                    Marca = marca,
-                    Modelo = modelo,
-                    Anio = anio,
-                    Kilometraje = kilometraje,
-                    Cilindraje = cilindraje
+                    Placa = vm.Placa,
+                    Marca = vm.Marca,
+                    Modelo = vm.Modelo,
+                    Anio = vm.Anio,
+                    Kilometraje = vm.Kilometraje,
+                    Cilindraje = vm.Cilindraje ?? 0
                 };
             }
 
-            if (placaOriginal != placa &&
-                _repositorio.ObtenerPorPlaca(placa) != null)
+            if (placaOriginal != vm.Placa &&
+                _repositorio.ObtenerPorPlaca(vm.Placa) != null)
             {
                 ModelState.AddModelError(
                     "Placa",
                     "La nueva placa ya está registrada."
                 );
 
-                return View(vehiculo);
+                return View(vm);
             }
 
-            if (placaOriginal != placa)
+            if (placaOriginal != vm.Placa)
             {
                 _repositorio.Eliminar(placaOriginal);
                 _repositorio.Agregar(vehiculo);

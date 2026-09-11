@@ -1,4 +1,4 @@
-@model TransLogística_SV.Models.Vehiculo
+@model TransLogística_SV.Models.VehiculoViewModel
 
 @{
     ViewData["Title"] = "Editar vehículo";
@@ -12,141 +12,85 @@
 
         @Html.AntiForgeryToken()
 
-        <input type="hidden"
-               name="placaOriginal"
-               value="@Model.Placa" />
+        <input type="hidden" name="placaOriginal" value="@Model.Placa" />
 
-        <div asp-validation-summary="All"
-             class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger"></div>
 
         <div class="mb-3">
             <label class="form-label">Tipo de vehículo</label>
 
-            <input class="form-control"
-                   value="@Model.TipoVehiculo"
-                   readonly />
+            <input asp-for="Tipo" class="form-control" readonly />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Placa</label>
-
-            <input name="placa"
-                   class="form-control"
-                   value="@Model.Placa"
-                   required />
+            <input asp-for="Placa" class="form-control" />
+            <span asp-validation-for="Placa" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Marca</label>
-
-            <input name="marca"
-                   class="form-control"
-                   value="@Model.Marca"
-                   required />
+            <input asp-for="Marca" class="form-control" />
+            <span asp-validation-for="Marca" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Modelo</label>
-
-            <input name="modelo"
-                   class="form-control"
-                   value="@Model.Modelo"
-                   required />
+            <input asp-for="Modelo" class="form-control" />
+            <span asp-validation-for="Modelo" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Año</label>
-
-            <input name="anio"
-                   type="number"
-                   class="form-control"
-                   value="@Model.Anio"
-                   required />
+            <input asp-for="Anio" type="number" class="form-control" />
+            <span asp-validation-for="Anio" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Kilometraje</label>
-
-            <input name="kilometraje"
-                   type="number"
-                   step="0.01"
-                   class="form-control"
-                   value="@Model.Kilometraje"
-                   required />
+            <input asp-for="Kilometraje" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="Kilometraje" class="text-danger"></span>
         </div>
 
-        @if (Model is TransLogística_SV.Models.Camion camion)
+        @if (Model.Tipo == "Camion")
         {
             <div class="mb-3">
-                <label class="form-label">
-                    Capacidad de carga (toneladas)
-                </label>
-
-                <input name="capacidadCargaToneladas"
-                       type="number"
-                       step="0.01"
-                       class="form-control"
-                       value="@camion.CapacidadCargaToneladas" />
+                <label class="form-label">Capacidad de carga (toneladas)</label>
+                <input asp-for="CapacidadCargaToneladas" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="CapacidadCargaToneladas" class="text-danger"></span>
             </div>
         }
 
-        @if (Model is TransLogística_SV.Models.Automovil automovil)
+        @if (Model.Tipo == "Automovil")
         {
             <div class="mb-3">
-
-                <label class="form-label">
-                    Tipo de combustible
-                </label>
-
-                <select name="tipoCombustible"
-                        class="form-select">
-
-                    <option value="Gasolina Regular"
-                            selected="@(automovil.TipoCombustible == "Gasolina Regular")">
-                        Gasolina Regular
-                    </option>
-
-                    <option value="Gasolina Premium"
-                            selected="@(automovil.TipoCombustible == "Gasolina Premium")">
-                        Gasolina Premium
-                    </option>
-
-                    <option value="Diesel"
-                            selected="@(automovil.TipoCombustible == "Diesel")">
-                        Diesel
-                    </option>
-
+                <label class="form-label">Tipo de combustible</label>
+                <select asp-for="TipoCombustible" class="form-select">
+                    <option value="Gasolina Regular">Gasolina Regular</option>
+                    <option value="Gasolina Premium">Gasolina Premium</option>
+                    <option value="Diesel">Diesel</option>
                 </select>
-
+                <span asp-validation-for="TipoCombustible" class="text-danger"></span>
             </div>
         }
 
-        @if (Model is TransLogística_SV.Models.Motocicleta motocicleta)
+        @if (Model.Tipo == "Motocicleta")
         {
             <div class="mb-3">
-
-                <label class="form-label">
-                    Cilindraje (cc)
-                </label>
-
-                <input name="cilindraje"
-                       type="number"
-                       class="form-control"
-                       value="@motocicleta.Cilindraje" />
-
+                <label class="form-label">Cilindraje (cc)</label>
+                <input asp-for="Cilindraje" type="number" class="form-control" />
+                <span asp-validation-for="Cilindraje" class="text-danger"></span>
             </div>
         }
 
-        <button type="submit"
-                class="btn btn-success">
-            Guardar cambios
-        </button>
+        <button type="submit" class="btn btn-success">Guardar cambios</button>
 
-        <a asp-action="Index"
-           class="btn btn-secondary">
-            Cancelar
-        </a>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 
     </form>
 
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
